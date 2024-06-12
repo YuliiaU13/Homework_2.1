@@ -20,3 +20,7 @@ if unique_symbols_number > 10:
     print(True)
 else:
     print(False)
+
+# The shorter variant (syntax: do_smth if condition else do_smth_else):
+# unique_symbols_number = len(set(input('Введіть рядок: ')))
+# print(True) if unique_symbols_number >10 else print(False)

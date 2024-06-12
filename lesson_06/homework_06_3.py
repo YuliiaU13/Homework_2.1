@@ -7,6 +7,5 @@ print(lst1)
 lst2 = []
 for string in lst1:
     if isinstance(string, str):
-        if len(string) > 0:
-            lst2.append(string)
+        lst2.append(string)
 print(lst2)
