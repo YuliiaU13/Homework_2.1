@@ -10,9 +10,9 @@ def multiplication_table(number):
     multiplier = 1
 
     # Complete the while loop condition:
-    while multiplier <= 10:
+    while True:
         result = number * multiplier
-        if result >= 25:
+        if result > 25:
             # Enter the action to take if the result is greater than 25:
             break
         print(f'{number}x{multiplier}={result}')
@@ -40,12 +40,6 @@ def sum_of(a, b):
 
 print(sum_of(3, 15))
 
-# 2 variant
-sum_xy = lambda x, y: x + y
-
-
-print(sum_xy(3, 15))
-
 
 # task 3
 """  Написати функцію, яка розрахує середнє арифметичне списку чисел.
@@ -53,26 +47,22 @@ print(sum_xy(3, 15))
 
 
 def calculate_average(numbers):
-    non_numbers = []
+    # перевірка, чи список не пустий та вивід повідомлення:
+    if len(numbers) == 0:
+        print('Неможливо зробити обчислення, список порожній')
+        return None
     # перевірка, чи є у списку елементи "не числа":
     for element in numbers:
         if not isinstance(element, (int, float)):
-            non_numbers.append(element)
-    # вивід повідомлення які елементи не є числами:
-    if non_numbers:
-        print('Неможливо зробити обчислення. Ці елементи не числа:', non_numbers)
-        return None
-    # перевірка, чи список не пустий та вивід повідомлення:
-    if len(numbers) == 0:
-        print('Неможливо зробити обчислення, список порожній.')
-        return None
+            print(f'Неможливо зробити обчислення. Цей елемент не число: "{element}"')
+            return None
     # формула для знаходження шуканого:
     average = sum(numbers) / len(numbers)
 
     print(average)
 
 
-list_numbers_1 = [12, 3, 'abc', 5, 0, 8, 93, 7, 4, 'xyz']
+list_numbers_1 = ['', 12, 3, 'abc', 5, 0, 8, 93, 7, 4, 'xyz']
 list_numbers_2 = []
 list_numbers_3 = [12, 3, 5, 0, 8, 93, 7, 4]
 calculate_average(list_numbers_1)
@@ -115,10 +105,10 @@ print('Найдовше слово у списку:', longest_word)
 не є підрядком першого рядка."""
 
 def find_substring(str1, str2):
-    return (str1.lower()).find(str2)
+    return str1.find(str2)
 
 str1 = "Welcome to Ukraine!"
-str2 = "ukraine"
+str2 = "Ukraine"
 print(find_substring(str1, str2)) # поверне 11
 
 str1 = "The quick brown fox jumps over the lazy dog"
@@ -181,7 +171,7 @@ reminder_devision(8019, 8)
 
 
 # new variant without input:
-def cost_item_2(number_1, number_2): # monthly_payment and month_number
+def cost_item_2(number_1, number_2): # monthly_payment and amount_of_months
     cost = number_1 * number_2
     print(f'Вартість комп\'ютера = {cost:.2f} грн')
 
@@ -229,7 +219,7 @@ list_creation_str(lst1)
 # new variant
 def unique_symbols_10():
     unique_symbols_number = len(set(input('Введіть рядок: ')))
-    print(True) if unique_symbols_number >10 else print(False)
+    print(True) if unique_symbols_number > 10 else print(False)
 
 unique_symbols_10() # I am working from Monday to Sunday 4 weeks per month. -> True
 unique_symbols_10() # It's too much -> False
