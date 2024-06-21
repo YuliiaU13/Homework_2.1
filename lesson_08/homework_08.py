@@ -12,14 +12,14 @@
 
 def sum_of_numbers_in_strings(strings):
     for string in strings:
+        parts = string.split(',')  # split the string to parts the "," is separator
         try:
-            parts = string.split(',') # split the string to parts the "," is separator
             total = sum(int(part) for part in parts) # turn parts to numbers and count their sum
             print(total)
         except ValueError:
             print('Не можу це зробити!') # if there is ValueError, process it and display the text
 
 
-set_of_strings = ['None,12,23,34,56', 'text1,2,3,4', ' ,,123,1,3', '12,10,1,2,3']
+strings = ['None,12,23,34,56', 'text1,2,3,4', ' ,,123,1,3', '12,10,1,2,3']
 
-sum_of_numbers_in_strings(set_of_strings)
+sum_of_numbers_in_strings(strings)
