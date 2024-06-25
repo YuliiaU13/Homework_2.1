@@ -13,4 +13,3 @@ class ViceVersaNegativeTest(unittest.TestCase):
         error = type_error.exception
         error_message = error.args[0]
         self.assertEqual(error_message, expected_message)
-        pass

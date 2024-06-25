@@ -13,7 +13,6 @@ class SumOfNegativeTest(unittest.TestCase):
         error = type_error.exception
         error_message = error.args[0]
         self.assertEqual(error_message, expected_message)
-        pass
 
     def test_sum_of_negative_str(self):
         expected_message_2 = 'can only concatenate str (not "int") to str'
@@ -23,4 +22,3 @@ class SumOfNegativeTest(unittest.TestCase):
         error = type_error_2.exception
         error_message = error.args[0]
         self.assertEqual(error_message, expected_message_2)
-        pass
