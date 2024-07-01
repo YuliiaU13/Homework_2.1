@@ -20,3 +20,4 @@ def test_factorial_string():
 def test_factorial_string():
     with pytest.raises(TypeError):
         assert factorial(None) == 9
+

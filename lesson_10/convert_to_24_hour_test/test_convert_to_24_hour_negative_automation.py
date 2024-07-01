@@ -33,3 +33,4 @@ def test_convert_to_24_hour_more_12_h():
 @pytest.mark.xfail(reason='takes minutes > 60')
 def test_convert_to_24_hour_more_59_min():
     assert convert_to_24_hour("0:60 PM") == "13:00"
+

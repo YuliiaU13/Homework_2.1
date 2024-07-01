@@ -7,3 +7,4 @@ from lesson_10.Lesson10_functions import factorial
 @pytest.mark.smoke
 def test_factorial():
     assert factorial(3) == 6
+
