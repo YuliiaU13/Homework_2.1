@@ -7,3 +7,6 @@ from lesson_10.Lesson10_functions import is_anagram
 def test_is_anagram():
     assert is_anagram("age", "eag")
 
+@pytest.mark.negative
+def test_is_anagram():
+    assert is_anagram("age", "eaf") is False

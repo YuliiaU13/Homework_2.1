@@ -7,10 +7,8 @@ input_convert = ('11:59 AM', '00:00 AM', '00:01 AM', '06:30 AM',
 expected = ('11:59', '00:00', '00:01', '06:30',
             '12:00', '12:01', '18:35', '23:59')
 
-io_params = list(zip(input_convert, expected))
-
 
 @pytest.mark.convert_time
-@pytest.mark.parametrize('input_convert, expected', io_params, ids=input_convert)
+@pytest.mark.parametrize('input_convert, expected', list(zip(input_convert, expected)), ids=input_convert)
 def test_convert_to_24_hour1(input_convert, expected):
     assert expected == convert_to_24_hour(input_convert)
