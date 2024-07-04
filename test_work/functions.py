@@ -29,16 +29,18 @@ journal_list = [
 volume_param = 10000
 
 
-def get_avg_price(some_list):
+def get_avg_price(some_list, volume_param):
     sum_price = 0
     total_number = 0
     for journal in some_list:
-        if journal['volume'] > volume_param:
-            sum_price += journal['price']
+        volume = journal.get('volume', 0)
+        price = journal.get('price', 0)
+        if volume > volume_param:
+            sum_price += price
             total_number += 1
-        if total_number == 0:
-            return 0
+    if total_number == 0:
+        return 0
     return round((sum_price / total_number), 2)
 
 
-print(get_avg_price(journal_list))
+print(get_avg_price(journal_list, 10000))
