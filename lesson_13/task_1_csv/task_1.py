@@ -6,35 +6,45 @@
 
 import csv
 
-unique_rows = set()
 
-# with open('random.csv', newline='') as file1:
+def result_books_csv(file_paths):
+    unique_rows = set()
+
+    for file_path in file_paths:
+        try:
+            with open(file_path, newline='') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    unique_rows.add(tuple(row))
+        except FileNotFoundError:
+            print(f"File {file_path} not found.")
+            continue
+
+    result_file_path = 'result_books.csv'
+
+    with open(result_file_path, 'w', newline='') as result_file:
+        writer = csv.writer(result_file)
+        for row in unique_rows:
+            writer.writerow(row)
+
+
+file_paths = ['book1.csv', 'book2.csv']
+result_books_csv(file_paths)
+
+#old code
+# unique_rows = set()
+
+# with open('Book1.csv', newline='') as file1:
 #     reader_1 = csv.reader(file1)
 #     for row in reader_1:
 #         unique_rows.add(tuple(row))
 #
-# with open('random-michaels.csv', newline='') as file2:
+# with open('Book2.csv', newline='') as file2:
 #     reader_2 = csv.reader(file2)
 #     for row in reader_2:
 #         unique_rows.add(tuple(row))
-#
-# with open('result_random.csv', 'w', newline='') as result_file:
+
+# with open('result_books.csv', 'w', newline='') as result_file:
 #     writer = csv.writer(result_file)
 #     for row in unique_rows:
 #         writer.writerow(row)
-
-
-with open('Book1.csv', newline='') as file1:
-    reader_1 = csv.reader(file1)
-    for row in reader_1:
-        unique_rows.add(tuple(row))
-
-with open('Book2.csv', newline='') as file2:
-    reader_2 = csv.reader(file2)
-    for row in reader_2:
-        unique_rows.add(tuple(row))
-
-with open('result_books.csv', 'w', newline='') as result_file:
-    writer = csv.writer(result_file)
-    for row in unique_rows:
-        writer.writerow(row)
