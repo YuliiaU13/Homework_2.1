@@ -7,29 +7,29 @@
 import csv
 
 
-def result_books_csv(file_paths):
+def result_books_csv(files):
     unique_rows = set()
 
-    for file_path in file_paths:
+    for file in files:
         try:
-            with open(file_path, newline='') as file:
-                reader = csv.reader(file)
+            with open(file, newline='') as f:
+                reader = csv.reader(f)
                 for row in reader:
                     unique_rows.add(tuple(row))
         except FileNotFoundError:
-            print(f"File {file_path} not found.")
+            print(f"File {file} not found.")
             continue
 
-    result_file_path = 'result_books.csv'
+    result_file = 'result_books.csv'
 
-    with open(result_file_path, 'w', newline='') as result_file:
-        writer = csv.writer(result_file)
+    with open(result_file, 'w', newline='') as result_f:
+        writer = csv.writer(result_f)
         for row in unique_rows:
             writer.writerow(row)
 
 
-file_paths = ['book1.csv', 'book2.csv']
-result_books_csv(file_paths)
+files = ['book1.csv', 'book2.csv']
+result_books_csv(files)
 
 #old code
 # unique_rows = set()
