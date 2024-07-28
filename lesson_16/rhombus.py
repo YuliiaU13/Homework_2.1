@@ -58,7 +58,7 @@ if __name__ == '__main__':
     print(r1.__dict__)
     # r1.angle_ab = 27
     # print(r1.__dict__)
-    # print(r1.__setattr__('angle_ba', 30))
-    # print(r1.__setattr__('side_a', -5))
+    # r1.angle_ba = 30
+    # r1.side_a = -5
     # print(r1.__dict__)
     print(r1.check_angles())

@@ -12,9 +12,19 @@ def team_lead():
         team_size=6
     )
 
-def test_employee_attributes(team_lead):
-    assert team_lead.name == 'Anna'
-    assert team_lead.salary == 1500
+
+# def test_employee_attributes(team_lead):
+#     assert team_lead.name == 'Anna'
+#     assert team_lead.salary == 1500
+
+
+attributes = ['name', 'salary']
+values = ['Anna', 1500]
+
+
+@pytest.mark.parametrize('attributes, values', list(zip(attributes, values)))
+def test_employee_attributes(team_lead, attributes, values):
+    assert getattr(team_lead, attributes) == values
 
 
 def test_manager_attributes(team_lead):
