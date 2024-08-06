@@ -1,14 +1,18 @@
 from __future__ import unicode_literals
-import sys, glob, csv, pytz, shutil
+import sys
+import glob
+import csv
+import pytz
+import shutil
 import os
 from os import listdir, getcwd, access, W_OK
 from os.path import abspath, join, dirname, split, exists, isfile, isdir
-
-sys.path.append("/randominfo/")
-from random import randint, choice, sample, randrange
+from random import choice, randint, sample, randrange
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 from math import ceil
+
+sys.path.append("/randominfo/")
 
 __title__ = 'randominfo'
 __version__ = '2.0.2'
@@ -19,8 +23,6 @@ __license__ = 'MIT'
 def full_path(filename):
     return os.path.join(os.path.dirname(__file__), filename)
 
-
-from utils import full_path
 
 file_path = full_path('data.csv')
 
@@ -43,36 +45,73 @@ def get_id(length=6, seq_number=None, step=1, prefix=None, postfix=None):
     return generated_id
 
 
-def get_first_name(gender=None, filtered_data=None):
-    first_name_file = csv.reader(open(full_path('data.csv'), 'r'))
+# def get_first_name(gender=None, filtered_data=None):
+#     first_name_file = csv.reader(open(full_path('data.csv'), 'r'))
+#     filtered_data = []
+#     if gender is None:
+#         for data in first_name_file:
+#             if data[0] != '':
+#                 filtered_data.append(data)
+#     else:
+#         if gender.lower() == "male":
+#             for data in first_name_file:
+#                 if data[0] != '':
+#                     if data[2] == "male":
+#                         filtered_data.append(data)
+#         elif gender.lower() == "female":
+#             for data in first_name_file:
+#                 if data[0] != '':
+#                     if data[2] == "female":
+#                         filtered_data.append(data)
+#         else:
+#             raise ValueError("Enter gender male or female.")
+#     return choice(filtered_data)[0]
+#
+#
+# def get_last_name(filtered_data=None):
+#     last_name_file = csv.reader(open(full_path('data.csv'), 'r'))
+#     filtered_data = []
+#     for data in last_name_file:
+#         if data[1] != '':
+#             filtered_data.append(data[1])
+#     return choice(filtered_data)
+
+def get_first_name(gender=None):
     filtered_data = []
-    if gender is None:
-        for data in first_name_file:
-            if data[0] != '':
-                filtered_data.append(data)
-    else:
-        if gender.lower() == "male":
-            for data in first_name_file:
-                if data[0] != '':
-                    if data[2] == "male":
-                        filtered_data.append(data)
-        elif gender.lower() == "female":
-            for data in first_name_file:
-                if data[0] != '':
-                    if data[2] == "female":
-                        filtered_data.append(data)
-        else:
-            raise ValueError("Enter gender male or female.")
+
+    with open(full_path('data.csv'), 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if len(row) >= 3:
+                if gender is None:
+                    if row[0] != '':
+                        filtered_data.append((row[0], row[1]))
+                elif gender.lower() in ["male", "female"]:
+                    if row[2].lower() == gender.lower() and row[0] != '':
+                        filtered_data.append((row[0], row[1]))
+                else:
+                    raise ValueError("Gender must be 'male' or 'female'.")
+
+    if not filtered_data:
+        raise ValueError("No data available for the specified criteria.")
+
     return choice(filtered_data)[0]
 
 
-def get_last_name(filtered_data=None):
-    last_name_file = csv.reader(open(full_path('data.csv'), 'r'))
+def get_last_name():
     filtered_data = []
-    for data in last_name_file:
-        if data[1] != '':
-            filtered_data.append(data[1])
-    return choice(filtered_data)
+
+    with open(full_path('data.csv'), 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if len(row) >= 2:
+                if row[1] != '':
+                    filtered_data.append((row[0], row[1]))
+
+    if not filtered_data:
+        raise ValueError("No last names found in the data.")
+
+    return choice(filtered_data)[1]
 
 
 def get_gender(first_name):
@@ -85,23 +124,65 @@ def get_gender(first_name):
     return gender
 
 
-def get_country(first_name=None, country_file=None):
-    country_file = csv.reader(open(full_path('data.csv'), 'r'))
-    country = ""
+# def get_country(first_name=None, country_file=None):
+#     country_file = csv.reader(open(full_path('data.csv'), 'r'))
+#     country = ""
+#     if first_name is not None:
+#         for data in country_file:
+#             if data[0] != '' and data[0] == first_name:
+#                 country = data[3]
+#                 break
+#         if country == "":
+#             print("Specified user data is not available. Tip: Generate random country.")
+#     else:
+#         filtered_data = []
+#         for data in country_file:
+#             if data[12] != '':
+#                 filtered_data.append(data[12])
+#         country = choice(filtered_data)
+#     return country
+
+# def get_country(first_name=None):
+#     # Зчитування даних з CSV файлу
+#     with open(full_path('data.csv'), 'r') as file:
+#         country_file = csv.reader(file)
+#
+#         if first_name is not None:
+#             for data in country_file:
+#                 if len(data) > 3 and data[0] != '' and data[0] == first_name:
+#                     return data[3]  # Припускаємо, що країна в колонці з індексом 3
+#             print("Specified user data is not available. Tip: Generate random country.")
+#         else:
+#             filtered_data = []
+#             for data in country_file:
+#                 if len(data) > 12 and data[12] != '':  # Переконайтеся, що колонка існує
+#                     filtered_data.append(data[12])  # Припускаємо, що країна в колонці з індексом 12
+#             if filtered_data:
+#                 return choice(filtered_data)
+#             else:
+#                 return 'Unknown'
+
+def get_country(first_name=None):
+    countries = []
+
+    with open(full_path('data.csv'), 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if len(row) >= 10:
+                if first_name is not None:
+                    if row[0] == first_name:
+                        return row[8]
+                else:
+                    countries.append(row[8])
+
     if first_name is not None:
-        for data in country_file:
-            if data[0] != '' and data[0] == first_name:
-                country = data[3]
-                break
-        if country == "":
-            print("Specified user data is not available. Tip: Generate random country.")
+        print("Specified user data is not available. Tip: Generate random country.")
+        return 'Unknown'
     else:
-        filtered_data = []
-        for data in country_file:
-            if data[12] != '':
-                filtered_data.append(data[12])
-        country = choice(filtered_data)
-    return country
+        if countries:
+            return choice(countries)
+        else:
+            return 'Unknown'
 
 
 def get_full_name(gender=None):
@@ -147,11 +228,14 @@ def get_email(person=None):
     ext = choice(extensions)
 
     if c == 0:
-        email = person.first_name + get_formatted_datetime("%Y", person.birthdate, "%d %b, %Y") + dmn + "." + ext
+        email = person.first_name + get_formatted_datetime("%Y",
+                                                           person.birthdate, "%d %b, %Y") + dmn + "." + ext
     elif c == 1:
-        email = person.last_name + get_formatted_datetime("%d", person.birthdate, "%d %b, %Y") + dmn + "." + ext
+        email = person.last_name + get_formatted_datetime("%d",
+                                                          person.birthdate, "%d %b, %Y") + dmn + "." + ext
     else:
-        email = person.first_name + get_formatted_datetime("%y", person.birthdate, "%d %b, %Y") + dmn + "." + ext
+        email = person.first_name + get_formatted_datetime("%y",
+                                                           person.birthdate, "%d %b, %Y") + dmn + "." + ext
     return email
 
 
@@ -215,7 +299,8 @@ def get_alphabetic_profile_img(char, file_path, img_name, char_color=None, bg_co
             img.save(file_path)
     else:
         raise OSError(
-            "Invalid image name. Image name must contains characher including digits, alphabets, white space, dot, comma, ( ) [ ] { } _ + - =.")
+            "Invalid image name. Image name must contains characher including digits, "
+            "alphabets, white space, dot, comma, ( ) [ ] { } _ + - =.")
     return file_path
 
 
@@ -237,7 +322,8 @@ def get_face_profile_img(file_path, img_name, gender=None):
             raise OSError("Invalid or insufficient privileges for specified file path.")
     else:
         raise OSError(
-            "Invalid image name. Image name must contains characher including digits, alphabets, white space, dot, comma, ( ) [ ] { } _ + - =.")
+            "Invalid image name. Image name must contains characher including digits, "
+            "alphabets, white space, dot, comma, ( ) [ ] { } _ + - =.")
 
 
 startRange = datetime(1970, 1, 1, 0, 0, 0, 0, pytz.UTC)
@@ -259,86 +345,124 @@ def get_date(tstamp=None, _format="%d %b, %Y"):
     return datetime.utcfromtimestamp(tstamp).strftime(_format)
 
 
+# def get_birthdate(start_age=None, end_age=None, _format="%d %b, %Y"):
+#     start_range = datetime.today()
+#     end_range = datetime(1970, 1, 1, 0, 0, 0, 0, pytz.UTC)
+#     if start_age is not None:
+#         if type(start_age).__name__ != 'int':
+#             raise ValueError("Starting age value must be integer.")
+#     if end_age is not None:
+#         if type(end_age).__name__ != 'int':
+#             raise ValueError("Ending age value must be integer.")
+#     if start_age is not None and end_age is not None:  #If both are given in arg
+#         if start_age >= end_age:
+#             raise ValueError("Starting age must be less than ending age.")
+#         else:
+#             start_range = datetime(datetime.now().year - start_age, 12, 31, 23, 59, 59, 0, pytz.UTC)
+#             end_range = datetime(datetime.now().year - end_age, 1, 1, 0, 0, 0, 0, pytz.UTC)
+#     elif start_age is not None or end_age is not None:  #If anyone is given in arg
+#         age_year = start_age if start_age is not None else end_age
+#         start_range = datetime(datetime.now().year - age_year, 12, 31, 23, 59, 59, 0, pytz.UTC)
+#         end_range = datetime(datetime.now().year - age_year, 1, 1, 0, 0, 0, 0, pytz.UTC)
+#     else:
+#         pass
+#     start_ts = start_range.timestamp()
+#     end_ts = end_range.timestamp()
+#     return datetime.fromtimestamp(randrange(int(end_ts), int(start_ts))).strftime(_format)
+
 def get_birthdate(start_age=None, end_age=None, _format="%d %b, %Y"):
-    start_range = datetime.today()
-    end_range = datetime(1970, 1, 1, 0, 0, 0, 0, pytz.UTC)
-    if start_age is not None:
-        if type(start_age).__name__ != 'int':
-            raise ValueError("Starting age value must be integer.")
-    if end_age is not None:
-        if type(end_age).__name__ != 'int':
-            raise ValueError("Ending age value must be integer.")
-    if start_age is not None and end_age is not None:  #If both are given in arg
+    today = datetime.today()
+
+    if start_age is not None and end_age is not None:
         if start_age >= end_age:
             raise ValueError("Starting age must be less than ending age.")
-        else:
-            start_range = datetime(datetime.now().year - start_age, 12, 31, 23, 59, 59, 0, pytz.UTC)
-            end_range = datetime(datetime.now().year - end_age, 1, 1, 0, 0, 0, 0, pytz.UTC)
-    elif start_age is not None or end_age is not None:  #If anyone is given in arg
-        age_year = start_age if start_age is not None else end_age
-        start_range = datetime(datetime.now().year - age_year, 12, 31, 23, 59, 59, 0, pytz.UTC)
-        end_range = datetime(datetime.now().year - age_year, 1, 1, 0, 0, 0, 0, pytz.UTC)
+        end_date = today - timedelta(days=start_age * 365)
+        start_date = today - timedelta(days=end_age * 365)
+    elif start_age is not None:
+        end_date = today
+        start_date = today - timedelta(days=start_age * 365)
+    elif end_age is not None:
+        start_date = today - timedelta(days=end_age * 365)
+        end_date = today
     else:
-        pass
-    start_ts = start_range.timestamp()
-    end_ts = end_range.timestamp()
-    return datetime.fromtimestamp(randrange(int(end_ts), int(start_ts))).strftime(_format)
+        raise ValueError("At least one of start_age or end_age must be provided.")
+
+    timestamp_start = start_date.timestamp()
+    timestamp_end = end_date.timestamp()
+
+    return datetime.fromtimestamp(randrange(int(timestamp_start), int(timestamp_end))).strftime(_format)
 
 
 # def get_address():
 #     full_address = []
-#     address_param = ['street', 'landmark', 'area', 'city', 'state', 'country', 'pincode']
-#     for i in range(5, 12):
-#         with open(full_path('data.csv'), 'r') as file:
-#             address_file = csv.reader(file)
-#             all_addresses = []
-#             for address in address_file:
-#                 if len(address) > i:
-#                     if address[i] != '':
-#                         all_addresses.append(address[i])
-#             if all_addresses:
-#                 full_address.append(choice(all_addresses))
-#             else:
-#                 full_address.append('')
-#     if len(full_address) < len(address_param):
-#         full_address.extend([''] * (len(address_param) - len(full_address)))
-#     full_address = dict(zip(address_param, full_address))
-#     return full_address
+#     address_param = ['street address', 'landmark', 'area', 'city', 'state', 'pincode']
+#     address_data = {param: [] for param in address_param}
+#
+#     with open(full_path('data.csv'), 'r') as file:
+#         reader = csv.reader(file)
+#         for row in reader:
+#             if len(row) >= len(address_param):
+#                 for i, param in enumerate(address_param):
+#                     if row[i] != '':
+#                         address_data[param].append(row[i])
+#     for param in address_param:
+#         if address_data[param]:
+#             full_address.append(choice(address_data[param]))
+#         else:
+#             full_address.append('Unknown')
+#     return dict(zip(address_param, full_address))
+
 
 def get_address():
-    full_address = []
-    address_param = ['street', 'landmark', 'area', 'city', 'state', 'country', 'pincode']
-    address_data = {param: [] for param in address_param}
+    address_data = {'street address': [], 'landmark': [], 'area': [], 'city': [], 'state': [], 'pincode': []}
 
     with open(full_path('data.csv'), 'r') as file:
         reader = csv.reader(file)
         for row in reader:
-            # Перевірка, чи є достатня кількість стовпців
-            if len(row) >= 12:
-                for i in range(5, 12):
-                    if row[i] != '':
-                        address_data[address_param[i - 5]].append(row[i])
+            if len(row) >= 10:  # Переконатися, що є достатньо колонок
+                address_data['street address'].append(row[5])
+                address_data['landmark'].append(row[6])
+                address_data['area'].append(row[7])
+                address_data['city'].append(row[8])
+                address_data['state'].append(row[9])
+                address_data['pincode'].append(row[10])
 
-    # Вибір випадкового значення для кожної адресної компоненти
-    for param in address_param:
+    full_address = []
+    for param in ['street address', 'landmark', 'area', 'city', 'state', 'pincode']:
         if address_data[param]:
             full_address.append(choice(address_data[param]))
         else:
-            full_address.append('Unknown')  # Якщо не знайдено жодного значення
+            full_address.append('Unknown')
 
-    return dict(zip(address_param, full_address))
+    return dict(zip(['street address', 'landmark', 'area', 'city', 'state', 'pincode'], full_address))
+
+
+# def get_hobbies():
+#     hobbies_file = csv.reader(open(full_path('data.csv'), 'r'))
+#     all_hobbies = []
+#     for data in hobbies_file:
+#         if data[3] != '':
+#             all_hobbies.append(data[3])
+#     hobbies = []
+#     for _ in range(1, randint(2, 6)):
+#         hobbies.append(choice(all_hobbies))
+#     return hobbies
 
 
 def get_hobbies():
-    hobbies_file = csv.reader(open(full_path('data.csv'), 'r'))
     all_hobbies = []
-    for data in hobbies_file:
-        if data[4] != '':
-            all_hobbies.append(data[4])
-    hobbies = []
-    for _ in range(1, randint(2, 6)):
-        hobbies.append(choice(all_hobbies))
-    return hobbies
+
+    with open(full_path('data.csv'), 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if len(row) >= 4:
+                if row[3] != '':
+                    all_hobbies.append(row[3])
+
+    if all_hobbies:
+        return [choice(all_hobbies) for _ in range(randint(2, 6))]
+    else:
+        return []
 
 
 class Person:
@@ -350,7 +474,7 @@ class Person:
         self.birthdate = get_birthdate()
         self.phone = get_phone_number()
         self.email = get_email(self)
-        self.gender = get_gender(first_name)
+        self.gender = get_gender(self.full_name)
         self.country = get_country(first_name)
         self.password = random_password()
         self.hobbies = get_hobbies()
@@ -388,7 +512,7 @@ class Person:
             "gender": self.gender,
             "email": self.email,
             "phone": self.phone,
-            "paswd": self.paswd,
+            "password": self.password,
             "country": self.country,
             "hobbies": self.hobbies,
             "address": self.address,
@@ -403,3 +527,9 @@ https://www.familyeducation.com/baby-names/browse-origin/surname/indian
 https://thispersondoesnotexist.com/
 https://en.wikipedia.org/wiki/List_of_hobbies
 '''
+
+with open(full_path('data.csv'), 'r') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        print(row)
+        break

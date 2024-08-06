@@ -4,9 +4,9 @@
 
 
 class EvenNumbersIterator:
-    def __init__(self, current, n):
-        self.current = current
+    def __init__(self, n):
         self.n = n
+        self.current = 0
 
     def __iter__(self):
         return self
@@ -23,6 +23,6 @@ class EvenNumbersIterator:
         return result
 
 
-even_iterator = EvenNumbersIterator(1, 10)
+even_iterator = EvenNumbersIterator(10)
 for num in even_iterator:
     print(num)
