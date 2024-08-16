@@ -9,7 +9,7 @@
 import requests
 from pathlib import Path
 
-url = 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos'
+# url = 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos'
 params = {'sol': 1000, 'camera': 'fhaz', 'api_key': 'DEMO_KEY'}
 
 
@@ -19,16 +19,17 @@ class ApiLoadMarsPhotos:
         self.sol = sol
         self.camera = camera
         self.save_dir = Path(save_dir)
-        self.base_url = url
+        self.base_url = 'https://api.nasa.gov'
         self.save_dir.mkdir(parents=True, exist_ok=True)
 
     def select_photos(self):
+        url = f'{self.base_url}/mars-photos/api/v1/rovers/curiosity/photos'
         params = {
             'sol': self.sol,
             'camera': self.camera,
             'api_key': self.api_key
         }
-        response = requests.get(self.base_url, params=params)
+        response = requests.get(url, params=params)
         response.raise_for_status()
         return response.json()
 
@@ -50,5 +51,6 @@ class ApiLoadMarsPhotos:
 
 
 if __name__ == "__main__":
-    downloader = ApiLoadMarsPhotos(api_key='DEMO_KEY', sol=1000, camera='fhaz')
+    # downloader = ApiLoadMarsPhotos(api_key='DEMO_KEY', sol=1000, camera='fhaz')
+    downloader = ApiLoadMarsPhotos(**params)
     downloader.download_photos()
