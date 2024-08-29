@@ -24,7 +24,7 @@ class LogAnalyzer:
 
                 if 31 < heartbeat_difference < 33:
                     f.write(f"WARNING: Heartbeat difference is {heartbeat_difference} seconds in {current_timestamp_str}\n")
-                elif heartbeat_difference == 33:
+                elif heartbeat_difference >= 33:
                     f.write(f"ERROR: Heartbeat difference is {heartbeat_difference} seconds in {current_timestamp_str}\n")
 
         print(f"Analysis is completed. Results are written down in the '{self.output_file}'")

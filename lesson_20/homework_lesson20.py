@@ -36,9 +36,9 @@ class PostgresExecutor():
 
     def create_table_categories(self):
         with self.db() as cursor:
-            cursor.execute('''CREATE TABLE public.categories (id int4 NOT NULL, 
+            cursor.execute('''CREATE TABLE public.categories (id int4 NOT NULL,
             "name" varchar NOT NULL, CONSTRAINT categories_pk PRIMARY KEY (id));''')
-            cursor.execute('''INSERT INTO public.categories (id, "name") values (10, 'movies'), (20, 'cartoons'), 
+            cursor.execute('''INSERT INTO public.categories (id, "name") values (10, 'movies'), (20, 'cartoons'),
             (30, 'serials'), (40, 'documentaries')''')
             cursor.execute('select * from public.categories')
             categories_result = cursor.fetchall()
@@ -50,8 +50,8 @@ class PostgresExecutor():
             "description" varchar NOT NULL, price DECIMAL(10, 2) NOT NULL, categories_id int4 NULL,
             CONSTRAINT products_pk PRIMARY KEY (id),
             CONSTRAINT products_categories_fk FOREIGN KEY (categories_id) REFERENCES public."categories"(id));''')
-            cursor.execute('''INSERT INTO public.products (id, "name", "description", price, categories_id) 
-            values (1, 'The Queens Gambit', 'chess, talent, competition', 350, 30), 
+            cursor.execute('''INSERT INTO public.products (id, "name", "description", price, categories_id)
+            values (1, 'The Queens Gambit', 'chess, talent, competition', 350, 30),
             (2, 'Stone Men', 'Marble is the most luxurious stone in the world', 575, 40);''')
             cursor.execute('select * from public.products')
             products_result = cursor.fetchall()
