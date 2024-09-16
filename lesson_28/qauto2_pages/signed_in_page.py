@@ -14,8 +14,3 @@ class SignedInPage(BasePage):
 
     def get_empty_garage_message(self):
         return self.find_element(self.ui.after_register_msg).text
-
-    def verify_empty_garage_message(self, email):
-        message = self.get_empty_garage_message()
-        assert message == "You don’t have any cars in your garage", "Empty garage message did not match"
-        print(f' User {email} is registered!')

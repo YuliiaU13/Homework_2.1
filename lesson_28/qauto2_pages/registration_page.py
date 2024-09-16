@@ -1,5 +1,3 @@
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from lesson_28.qauto2_pages.base_page import BasePage
 from lesson_28.qauto2_pages.ui_elements import UIElements
 
@@ -10,9 +8,7 @@ class RegistrationPage(BasePage):
         self.ui = UIElements()
 
     def open_registration_form(self):
-        WebDriverWait(self.driver, 5).until(
-            EC.element_to_be_clickable(self.ui.signup_button)
-        ).click()
+        self.click_element(self.ui.signup_button)
 
     def fill_registration_form(self, name, last_name, email, password):
         self.input_text(self.ui.signup_name, name)
@@ -23,9 +19,7 @@ class RegistrationPage(BasePage):
         return self
 
     def submit_registration(self):
-        WebDriverWait(self.driver, 5).until(
-            EC.element_to_be_clickable(self.ui.register_button)
-        ).click()
+        self.click_element(self.ui.register_button)
 
     def sign_in(self, name, last_name, email, password):
         self.fill_registration_form(name, last_name, email, password).submit_registration()
