@@ -7,4 +7,4 @@ COPY . /app
 RUN pip install psycopg2
 RUN pip install -r requirements.txt
 
-CMD ["pytest", "db_docker_file.py"]
+CMD ["pytest", "test_db_docker_file.py"]
