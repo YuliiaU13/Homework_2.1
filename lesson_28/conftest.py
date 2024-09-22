@@ -38,7 +38,7 @@ def last_name():
 
 @pytest.fixture(scope='session')
 def email():
-    return "johny.john@johnny.com"
+    return "johny.johny6@johnny.com"
 
 
 @pytest.fixture(scope='session')

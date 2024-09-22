@@ -2,6 +2,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from lesson_28.qauto2_pages.base_page import BasePage
 from lesson_28.qauto2_pages.ui_elements import UIElements
+import allure
 
 
 class SignedInPage(BasePage):
@@ -9,8 +10,10 @@ class SignedInPage(BasePage):
         super(SignedInPage, self).__init__(driver)
         self.ui = UIElements()
 
+    @allure.step('Signed in page loaded')
     def verify_page_loaded(self):
         WebDriverWait(self.driver, 5).until(EC.url_contains("/panel/garage"))
 
+    @allure.step('Getting signed in page massage')
     def get_empty_garage_message(self):
         return self.find_element(self.ui.after_register_msg).text

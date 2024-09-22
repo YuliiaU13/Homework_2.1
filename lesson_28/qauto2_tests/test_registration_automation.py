@@ -1,7 +1,14 @@
-from lesson_28.qauto2_pages.signed_in_page import SignedInPage
+import allure
+import pytest
+
 from lesson_28.qauto2_pages.validators import RegistrationValidator
 
 
+@allure.epic('Epic. Sign in Qauto2')
+@allure.feature('Feature. User registration testing')
+@allure.story('Story. Qauto2 user registration testing')
+@allure.title('Test signed in user: {email}')
+@pytest.mark.allure_qauto
 def test_user_registration(registration_page, signed_in_page, name, last_name, email, password):
     validator = RegistrationValidator()
 
