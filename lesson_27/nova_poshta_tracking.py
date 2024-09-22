@@ -1,10 +1,12 @@
 import os
 from dotenv import load_dotenv
+import allure
 from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
 load_dotenv()
 
 
@@ -13,9 +15,11 @@ class NovaPoshtaTracking:
         self.driver = driver
         self.url = os.getenv("NEW_POST")
 
+    @allure.step('Opening Nova Poshta tracking page')
     def open_tracking_page(self):
         self.driver.get(self.url)
 
+    @allure.step('Entering tracking number: {tracking_number}')
     def enter_tracking_number(self, tracking_number):
         tracking_input = WebDriverWait(self.driver, 5).until(
             EC.presence_of_element_located((By.XPATH, '//input[@placeholder="Номер посилки"]'))
@@ -30,6 +34,7 @@ class NovaPoshtaTracking:
         # )
         # search_button.click()
 
+    @allure.step('Getting tracking status')
     def get_status(self):
         try:
             status_element = WebDriverWait(self.driver, 5).until(
@@ -42,5 +47,6 @@ class NovaPoshtaTracking:
             )
             return error_element.text
 
+    @allure.step('Closing browser')
     def close(self):
         self.driver.quit()
