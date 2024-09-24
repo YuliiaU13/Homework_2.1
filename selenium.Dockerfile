@@ -46,7 +46,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Google Chrome з .deb
-RUN dpkg -i /app/utils/google-chrome-stable_114.0.5735.90-1_amd64.deb \
+RUN dpkg -i /app/google-chrome-stable_114.0.5735.90-1_amd64.deb \
     && apt-get -f install -y
 
 # ChromeDriver для 114
@@ -66,5 +66,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 
 # Виконуємо команду для запуску тестів під час створення контейнера
-CMD ["pytest", "-m", "ui"]
-
+CMD ["pytest", "-m", "nova_poshta or allure_qauto"]
